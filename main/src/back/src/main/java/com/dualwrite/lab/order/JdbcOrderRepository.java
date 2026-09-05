@@ -72,4 +72,9 @@ public class JdbcOrderRepository implements OrderRepository {
         );
         return count == null ? 0L : count;
     }
+
+    @Override
+    public void deleteAll() {
+        jdbcTemplate.update("DELETE FROM orders");
+    }
 }

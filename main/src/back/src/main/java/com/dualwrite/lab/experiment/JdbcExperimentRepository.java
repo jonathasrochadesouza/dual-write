@@ -64,4 +64,9 @@ public class JdbcExperimentRepository implements ExperimentRepository {
                 ROW_MAPPER
         );
     }
+
+    @Override
+    public void deleteAll() {
+        jdbcTemplate.update("DELETE FROM experiments");
+    }
 }

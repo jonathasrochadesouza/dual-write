@@ -12,4 +12,6 @@ public interface OrderRepository {
     List<Order> findByExperimentId(UUID experimentId);
 
     long countByExperimentId(UUID experimentId);
+
+    void deleteAll();
 }

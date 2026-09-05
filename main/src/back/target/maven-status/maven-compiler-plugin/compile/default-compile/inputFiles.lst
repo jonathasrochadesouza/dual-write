@@ -13,6 +13,7 @@
 /Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/main/java/com/dualwrite/lab/kafka/EventPublisher.java
 /Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/main/java/com/dualwrite/lab/kafka/KafkaEventPublisher.java
 /Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/main/java/com/dualwrite/lab/kafka/KafkaMessageInspector.java
+/Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/main/java/com/dualwrite/lab/kafka/LabResetService.java
 /Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/main/java/com/dualwrite/lab/kafka/OrderCreatedEvent.java
 /Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/main/java/com/dualwrite/lab/metrics/DualWriteMetrics.java
 /Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/main/java/com/dualwrite/lab/order/JdbcOrderRepository.java

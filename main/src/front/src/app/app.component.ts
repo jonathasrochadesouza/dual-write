@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
 
   readonly selected = signal<ScenarioId | null>(null);
   readonly running = signal(false);
+  readonly resetting = signal(false);
   readonly error = signal<string | null>(null);
   readonly report = signal<ExperimentReport | null>(null);
   readonly history = signal<ExperimentHistoryItem[]>([]);
@@ -91,6 +92,28 @@ export class AppComponent implements OnInit {
     this.experimentService.history().subscribe({
       next: (items) => this.history.set(items),
       error: () => this.history.set([])
+    });
+  }
+
+  resetAll(): void {
+    if (!confirm('This will delete all experiments, orders, outbox events, and Kafka messages. Prometheus metrics will persist until the backend is restarted.\n\nContinue?')) {
+      return;
+    }
+
+    this.resetting.set(true);
+    this.error.set(null);
+
+    this.experimentService.reset().subscribe({
+      next: () => {
+        this.report.set(null);
+        this.history.set([]);
+        this.resetting.set(false);
+        this.reloadHistory();
+      },
+      error: (err) => {
+        this.resetting.set(false);
+        this.error.set(err?.error?.message ?? 'Failed to reset lab.');
+      }
     });
   }
 

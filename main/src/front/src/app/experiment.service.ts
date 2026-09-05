@@ -19,4 +19,8 @@ export class ExperimentService {
   history(): Observable<ExperimentHistoryItem[]> {
     return this.http.get<ExperimentHistoryItem[]>(this.baseUrl);
   }
+
+  reset(): Observable<{ kafkaReset: boolean }> {
+    return this.http.delete<{ kafkaReset: boolean }>(this.baseUrl);
+  }
 }

@@ -67,4 +67,9 @@ public class JdbcOutboxRepository implements OutboxRepository {
         );
         return count == null ? 0L : count;
     }
+
+    @Override
+    public void deleteAll() {
+        jdbcTemplate.update("DELETE FROM outbox_events");
+    }
 }

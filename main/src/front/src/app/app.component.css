@@ -194,6 +194,10 @@
 /* ── PAGE HEADER ───────────────────────────────── */
 
 .page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 24px;
 }
 
@@ -441,6 +445,27 @@
 .btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btn-danger {
+  background: var(--err);
+  color: #fff;
+  border: none;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #b91c1c;
+  box-shadow: var(--shadow);
+}
+
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spinner-light {
+  border-color: rgba(255,255,255,0.3);
+  border-top-color: #fff;
 }
 
 .btn-ghost {

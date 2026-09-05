@@ -10,4 +10,6 @@ public interface ExperimentRepository {
     Optional<Experiment> findById(UUID id);
 
     List<Experiment> findAllOrderByExecutedAtDesc();
+
+    void deleteAll();
 }

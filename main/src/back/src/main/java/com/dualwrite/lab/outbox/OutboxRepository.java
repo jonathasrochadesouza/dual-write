@@ -9,4 +9,6 @@ public interface OutboxRepository {
     List<OutboxEvent> findByExperimentId(UUID experimentId);
 
     long countByExperimentId(UUID experimentId);
+
+    void deleteAll();
 }
