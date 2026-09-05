@@ -1,6 +1,7 @@
 package com.dualwrite.lab.api;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -61,5 +62,10 @@ public class ExperimentController {
     @ResponseStatus(HttpStatus.OK)
     public LabResetService.ResetResult reset() {
         return labResetService.reset();
+    }
+
+    @GetMapping("/health")
+    public Map<String, String> health() {
+        return Map.of("status", "UP");
     }
 }

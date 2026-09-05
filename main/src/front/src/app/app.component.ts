@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExperimentService } from './experiment.service';
 import {
@@ -18,8 +18,9 @@ import {
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   private readonly experimentService = inject(ExperimentService);
+  private healthTimer: ReturnType<typeof setInterval> | null = null;
 
   readonly scenarios = SCENARIOS;
   readonly dualWriteScenarios = SCENARIOS.filter((s) => s.pattern === 'dual-write');
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit {
   readonly error = signal<string | null>(null);
   readonly report = signal<ExperimentReport | null>(null);
   readonly history = signal<ExperimentHistoryItem[]>([]);
+  readonly healthUp = signal(true);
 
   readonly canRun = computed(() => this.selected() !== null && !this.running());
 
@@ -58,6 +60,14 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.reloadHistory();
+    this.checkHealth();
+    this.healthTimer = setInterval(() => this.checkHealth(), 30_000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.healthTimer) {
+      clearInterval(this.healthTimer);
+    }
   }
 
   select(scenario: ScenarioCard): void {
@@ -88,6 +98,13 @@ export class AppComponent implements OnInit {
     });
   }
 
+  viewReport(id: string): void {
+    this.experimentService.report(id).subscribe({
+      next: (result) => this.report.set(result),
+      error: () => {}
+    });
+  }
+
   reloadHistory(): void {
     this.experimentService.history().subscribe({
       next: (items) => this.history.set(items),
@@ -114,6 +131,13 @@ export class AppComponent implements OnInit {
         this.resetting.set(false);
         this.error.set(err?.error?.message ?? 'Failed to reset lab.');
       }
+    });
+  }
+
+  checkHealth(): void {
+    this.experimentService.health().subscribe({
+      next: (res) => this.healthUp.set(res.status === 'UP'),
+      error: () => this.healthUp.set(false)
     });
   }
 

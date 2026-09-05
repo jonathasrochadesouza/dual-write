@@ -23,4 +23,8 @@ export class ExperimentService {
   reset(): Observable<{ kafkaReset: boolean }> {
     return this.http.delete<{ kafkaReset: boolean }>(this.baseUrl);
   }
+
+  health(): Observable<{ status: string }> {
+    return this.http.get<{ status: string }>(`${this.baseUrl}/health`);
+  }
 }
