@@ -1,4 +1,4 @@
-package com.dualwrite.lab.scenario;
+package com.dualwrite.lab.scenario.shared;
 
 import java.math.BigDecimal;
 import java.util.UUID;

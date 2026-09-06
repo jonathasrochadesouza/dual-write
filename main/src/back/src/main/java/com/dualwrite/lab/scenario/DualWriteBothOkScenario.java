@@ -3,29 +3,28 @@ package com.dualwrite.lab.scenario;
 import org.springframework.stereotype.Component;
 
 import com.dualwrite.lab.kafka.EventPublisher;
-import com.dualwrite.lab.kafka.KafkaEventPublisher;
-import com.dualwrite.lab.metrics.DualWriteMetrics;
 import com.dualwrite.lab.order.Order;
 import com.dualwrite.lab.order.OrderRepository;
+import com.dualwrite.lab.scenario.shared.ScenarioContext;
+import com.dualwrite.lab.scenario.shared.ScenarioId;
+import com.dualwrite.lab.scenario.shared.ScenarioPayloadFactory;
+import com.dualwrite.lab.scenario.shared.ScenarioPort;
 
 @Component
 public class DualWriteBothOkScenario implements ScenarioPort {
 
     private final OrderRepository orderRepository;
-    private final KafkaEventPublisher eventPublisher;
+    private final EventPublisher eventPublisher;
     private final ScenarioPayloadFactory payloadFactory;
-    private final DualWriteMetrics metrics;
 
     public DualWriteBothOkScenario(
             OrderRepository orderRepository,
-            KafkaEventPublisher eventPublisher,
-            ScenarioPayloadFactory payloadFactory,
-            DualWriteMetrics metrics
+            EventPublisher eventPublisher,
+            ScenarioPayloadFactory payloadFactory
     ) {
         this.orderRepository = orderRepository;
         this.eventPublisher = eventPublisher;
         this.payloadFactory = payloadFactory;
-        this.metrics = metrics;
     }
 
     @Override
@@ -35,16 +34,8 @@ public class DualWriteBothOkScenario implements ScenarioPort {
 
     @Override
     public void execute(ScenarioContext context) {
-        var sample = metrics.startTransactionTimer();
-        try {
-            Order order = Order.create(context.experimentId(), context.customerId(), context.total());
-            orderRepository.save(order);
-            metrics.recordDbWrite(id());
-
-            eventPublisher.publish(payloadFactory.toEvent(order), id());
-            metrics.recordKafkaPublish(id());
-        } finally {
-            metrics.stopTransactionTimer(sample, id());
-        }
+        Order order = Order.create(context.experimentId(), context.customerId(), context.total());
+        orderRepository.save(order);
+        eventPublisher.publish(payloadFactory.toEvent(order));
     }
 }

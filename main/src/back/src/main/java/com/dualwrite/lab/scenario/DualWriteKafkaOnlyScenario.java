@@ -4,32 +4,32 @@ import org.springframework.stereotype.Component;
 
 import com.dualwrite.lab.fault.FaultInjector;
 import com.dualwrite.lab.fault.FaultPoint;
-import com.dualwrite.lab.kafka.KafkaEventPublisher;
-import com.dualwrite.lab.metrics.DualWriteMetrics;
+import com.dualwrite.lab.kafka.EventPublisher;
 import com.dualwrite.lab.order.Order;
 import com.dualwrite.lab.order.OrderRepository;
+import com.dualwrite.lab.scenario.shared.ScenarioContext;
+import com.dualwrite.lab.scenario.shared.ScenarioId;
+import com.dualwrite.lab.scenario.shared.ScenarioPayloadFactory;
+import com.dualwrite.lab.scenario.shared.ScenarioPort;
 
 @Component
 public class DualWriteKafkaOnlyScenario implements ScenarioPort {
 
     private final OrderRepository orderRepository;
-    private final KafkaEventPublisher eventPublisher;
+    private final EventPublisher eventPublisher;
     private final ScenarioPayloadFactory payloadFactory;
     private final FaultInjector faultInjector;
-    private final DualWriteMetrics metrics;
 
     public DualWriteKafkaOnlyScenario(
             OrderRepository orderRepository,
-            KafkaEventPublisher eventPublisher,
+            EventPublisher eventPublisher,
             ScenarioPayloadFactory payloadFactory,
-            FaultInjector faultInjector,
-            DualWriteMetrics metrics
+            FaultInjector faultInjector
     ) {
         this.orderRepository = orderRepository;
         this.eventPublisher = eventPublisher;
         this.payloadFactory = payloadFactory;
         this.faultInjector = faultInjector;
-        this.metrics = metrics;
     }
 
     @Override
@@ -39,17 +39,9 @@ public class DualWriteKafkaOnlyScenario implements ScenarioPort {
 
     @Override
     public void execute(ScenarioContext context) {
-        var sample = metrics.startTransactionTimer();
-        try {
-            Order order = Order.create(context.experimentId(), context.customerId(), context.total());
-            eventPublisher.publish(payloadFactory.toEvent(order), id());
-            metrics.recordKafkaPublish(id());
-
-            faultInjector.maybeFail(FaultPoint.FAIL_DB_AFTER_PUBLISH, FaultPoint.FAIL_DB_AFTER_PUBLISH);
-            orderRepository.save(order);
-            metrics.recordDbWrite(id());
-        } finally {
-            metrics.stopTransactionTimer(sample, id());
-        }
+        Order order = Order.create(context.experimentId(), context.customerId(), context.total());
+        eventPublisher.publish(payloadFactory.toEvent(order));
+        faultInjector.fail(FaultPoint.FAIL_DB_AFTER_PUBLISH);
+        orderRepository.save(order);
     }
 }

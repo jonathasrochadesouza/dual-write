@@ -1,13 +1,12 @@
 package com.dualwrite.lab.metrics;
 
-import org.springframework.stereotype.Component;
-
-import com.dualwrite.lab.report.Verdict;
-import com.dualwrite.lab.scenario.ScenarioId;
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import org.springframework.stereotype.Component;
+
+import com.dualwrite.lab.report.Verdict;
+import com.dualwrite.lab.scenario.shared.ScenarioId;
 
 @Component
 public class DualWriteMetrics {
@@ -24,7 +23,7 @@ public class DualWriteMetrics {
         counter("dualwrite.orders.total", scenario).increment();
     }
 
-    public void recordDbRollback(ScenarioId scenario) {
+    public void recordDatabaseWriteFailure(ScenarioId scenario) {
         counter("dualwrite.failures.db.total", scenario).increment();
     }
 
@@ -56,12 +55,12 @@ public class DualWriteMetrics {
 
     // ---- Timers ----
 
-    public Timer.Sample startTransactionTimer() {
+    public Timer.Sample startScenarioTimer() {
         return Timer.start(meterRegistry);
     }
 
-    public void stopTransactionTimer(Timer.Sample sample, ScenarioId scenario) {
-        sample.stop(Timer.builder("dualwrite.db.write.latency")
+    public void stopScenarioTimer(Timer.Sample sample, ScenarioId scenario) {
+        sample.stop(Timer.builder("dualwrite.scenario.duration")
                 .tag("scenario", scenario.name())
                 .register(meterRegistry));
     }

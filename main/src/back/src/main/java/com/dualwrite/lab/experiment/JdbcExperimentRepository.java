@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.dualwrite.lab.report.Verdict;
-import com.dualwrite.lab.scenario.ScenarioId;
+import com.dualwrite.lab.scenario.shared.ScenarioId;
 
 @Repository
 public class JdbcExperimentRepository implements ExperimentRepository {

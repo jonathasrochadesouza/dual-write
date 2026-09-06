@@ -91,7 +91,7 @@
       "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
       "id": 5,
       "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
-      "title": "Rollbacks no banco",
+      "title": "Falhas de escrita no banco",
       "description": "Total de transações que sofreram rollback (cenários C2 e C6)",
       "type": "stat",
       "targets": [{ "expr": "sum(dualwrite_failures_db_total)", "legendFormat": "", "refId": "A" }]
@@ -149,11 +149,11 @@
       },
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
       "id": 8,
-      "title": "Latencia: gravacao no banco",
+      "title": "Duracao do cenario (inclui commit)",
       "description": "Tempo medio de escrita na tabela orders por cenário",
       "type": "timeseries",
       "targets": [
-        { "expr": "rate(dualwrite_db_write_latency_seconds_sum[1m]) / clamp_min(rate(dualwrite_db_write_latency_seconds_count[1m]), 1)", "legendFormat": "{{scenario}}", "refId": "A" }
+        { "expr": "rate(dualwrite_scenario_duration_seconds_sum[1m]) / clamp_min(rate(dualwrite_scenario_duration_seconds_count[1m]), 1)", "legendFormat": "{{scenario}}", "refId": "A" }
       ]
     },
     {

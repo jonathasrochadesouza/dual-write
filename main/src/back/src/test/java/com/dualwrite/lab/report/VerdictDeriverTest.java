@@ -1,7 +1,5 @@
 package com.dualwrite.lab.report;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -11,7 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import com.dualwrite.lab.order.Order;
 import com.dualwrite.lab.outbox.OutboxEvent;
-import com.dualwrite.lab.scenario.ScenarioId;
+import com.dualwrite.lab.scenario.shared.ScenarioId;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VerdictDeriverTest {
 

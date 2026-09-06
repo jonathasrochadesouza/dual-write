@@ -1,4 +1,4 @@
-package com.dualwrite.lab.scenario;
+package com.dualwrite.lab.scenario.shared;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -6,14 +6,17 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.dualwrite.lab.metrics.DualWriteMetrics;
+import com.dualwrite.lab.metrics.InstrumentedScenario;
+
 @Component
 public class ScenarioRegistry {
 
     private final Map<ScenarioId, ScenarioPort> scenarios = new EnumMap<>(ScenarioId.class);
 
-    public ScenarioRegistry(List<ScenarioPort> scenarioPorts) {
+    public ScenarioRegistry(List<ScenarioPort> scenarioPorts, DualWriteMetrics metrics) {
         for (ScenarioPort port : scenarioPorts) {
-            scenarios.put(port.id(), port);
+            scenarios.put(port.id(), new InstrumentedScenario(port, metrics));
         }
     }
 

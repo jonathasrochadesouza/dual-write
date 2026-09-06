@@ -5,25 +5,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dualwrite.lab.fault.FaultInjector;
 import com.dualwrite.lab.fault.FaultPoint;
-import com.dualwrite.lab.metrics.DualWriteMetrics;
 import com.dualwrite.lab.order.Order;
 import com.dualwrite.lab.order.OrderRepository;
+import com.dualwrite.lab.scenario.shared.ScenarioContext;
+import com.dualwrite.lab.scenario.shared.ScenarioId;
+import com.dualwrite.lab.scenario.shared.ScenarioPort;
 
 @Component
 public class DualWriteNoneScenario implements ScenarioPort {
 
     private final OrderRepository orderRepository;
     private final FaultInjector faultInjector;
-    private final DualWriteMetrics metrics;
 
     public DualWriteNoneScenario(
             OrderRepository orderRepository,
-            FaultInjector faultInjector,
-            DualWriteMetrics metrics
+            FaultInjector faultInjector
     ) {
         this.orderRepository = orderRepository;
         this.faultInjector = faultInjector;
-        this.metrics = metrics;
     }
 
     @Override
@@ -34,16 +33,8 @@ public class DualWriteNoneScenario implements ScenarioPort {
     @Override
     @Transactional
     public void execute(ScenarioContext context) {
-        var sample = metrics.startTransactionTimer();
-        try {
-            Order order = Order.create(context.experimentId(), context.customerId(), context.total());
-            orderRepository.save(order);
-            faultInjector.maybeFail(FaultPoint.FAIL_BEFORE_COMMIT, FaultPoint.FAIL_BEFORE_COMMIT);
-        } catch (RuntimeException ex) {
-            metrics.recordDbRollback(id());
-            throw ex;
-        } finally {
-            metrics.stopTransactionTimer(sample, id());
-        }
+        Order order = Order.create(context.experimentId(), context.customerId(), context.total());
+        orderRepository.save(order);
+        faultInjector.fail(FaultPoint.FAIL_BEFORE_COMMIT);
     }
 }

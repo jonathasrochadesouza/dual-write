@@ -1,4 +1,4 @@
-package com.dualwrite.lab.scenario;
+package com.dualwrite.lab.scenario.shared;
 
 public enum ScenarioId {
     DUAL_WRITE_BOTH_OK,

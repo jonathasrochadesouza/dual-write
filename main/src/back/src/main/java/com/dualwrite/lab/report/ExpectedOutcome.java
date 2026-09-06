@@ -1,6 +1,6 @@
 package com.dualwrite.lab.report;
 
-import com.dualwrite.lab.scenario.ScenarioId;
+import com.dualwrite.lab.scenario.shared.ScenarioId;
 
 public record ExpectedOutcome(
         boolean orderPresent,

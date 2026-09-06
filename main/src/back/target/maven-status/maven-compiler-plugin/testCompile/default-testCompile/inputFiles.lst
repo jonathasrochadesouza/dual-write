@@ -1,3 +1,10 @@
 /Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/DualWriteLabApplicationTests.java
 /Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/fault/FaultInjectorTest.java
+/Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/metrics/CurrentScenarioTest.java
+/Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/metrics/InstrumentedEventPublisherTest.java
+/Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/metrics/InstrumentedFaultInjectorTest.java
+/Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/metrics/InstrumentedOrderRepositoryTest.java
+/Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/metrics/InstrumentedOutboxRepositoryTest.java
+/Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/metrics/InstrumentedScenarioTest.java
+/Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/metrics/ScenarioRegistryTest.java
 /Users/jonathasrochadesouza/Developer/repositories/dual-write/main/src/back/src/test/java/com/dualwrite/lab/report/VerdictDeriverTest.java

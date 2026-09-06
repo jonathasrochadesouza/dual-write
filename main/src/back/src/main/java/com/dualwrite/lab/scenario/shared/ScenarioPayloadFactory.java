@@ -1,4 +1,4 @@
-package com.dualwrite.lab.scenario;
+package com.dualwrite.lab.scenario.shared;
 
 import org.springframework.stereotype.Component;
 

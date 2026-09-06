@@ -2,7 +2,7 @@ package com.dualwrite.lab.report;
 
 import org.springframework.stereotype.Component;
 
-import com.dualwrite.lab.scenario.ScenarioId;
+import com.dualwrite.lab.scenario.shared.ScenarioId;
 
 @Component
 public class VerdictDeriver {

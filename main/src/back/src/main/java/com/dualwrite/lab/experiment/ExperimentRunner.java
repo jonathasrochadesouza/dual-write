@@ -13,10 +13,10 @@ import com.dualwrite.lab.report.ObservedState;
 import com.dualwrite.lab.report.ReportService;
 import com.dualwrite.lab.report.Verdict;
 import com.dualwrite.lab.report.VerdictDeriver;
-import com.dualwrite.lab.scenario.ScenarioContext;
-import com.dualwrite.lab.scenario.ScenarioId;
-import com.dualwrite.lab.scenario.ScenarioPort;
-import com.dualwrite.lab.scenario.ScenarioRegistry;
+import com.dualwrite.lab.scenario.shared.ScenarioContext;
+import com.dualwrite.lab.scenario.shared.ScenarioId;
+import com.dualwrite.lab.scenario.shared.ScenarioPort;
+import com.dualwrite.lab.scenario.shared.ScenarioRegistry;
 
 @Service
 public class ExperimentRunner {
@@ -60,7 +60,7 @@ public class ExperimentRunner {
             // Expected for fault-injected scenarios.
         }
 
-        sleepBriefly();
+        awaitKafkaPropagation();
 
         ObservedState observed = reportService.inspect(experimentId);
         Verdict verdict = verdictDeriver.derive(scenarioId, observed);
@@ -70,7 +70,12 @@ public class ExperimentRunner {
         return reportService.buildReport(experimentId);
     }
 
-    private static void sleepBriefly() {
+    /**
+     * The Kafka message inspector polls the topic asynchronously; a short wait
+     * gives it time to observe the events published by the scenario before the
+     * report is derived.
+     */
+    private static void awaitKafkaPropagation() {
         try {
             Thread.sleep(500L);
         } catch (InterruptedException ex) {
