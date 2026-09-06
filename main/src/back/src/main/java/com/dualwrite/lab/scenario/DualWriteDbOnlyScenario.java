@@ -16,9 +16,9 @@ public class DualWriteDbOnlyScenario implements ScenarioPort {
     private final DualWriteMetrics metrics;
 
     public DualWriteDbOnlyScenario(
-            OrderPersistence orderPersistence,
-            FaultInjector faultInjector,
-            DualWriteMetrics metrics
+        OrderPersistence orderPersistence,
+        FaultInjector faultInjector,
+        DualWriteMetrics metrics
     ) {
         this.orderPersistence = orderPersistence;
         this.faultInjector = faultInjector;
